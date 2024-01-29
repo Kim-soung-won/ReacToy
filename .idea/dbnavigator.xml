@@ -13,12 +13,68 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="582cdad0-c1d7-4d1c-af21-74afd98643d6">
-      <console name="Connection" type="STANDARD" schema="mysql" session="Main"><![CDATA[use mini
-select * from test
-create table test{
-    id int,
-    name varchar(255)
-};]]></console>
+      <console name="Connection" type="STANDARD" schema="mini" session="Main"><![CDATA[use mini;
+
+select * from article;
+drop table article;
+select * from user
+CREATE TABLE article(
+    article_id bigint primary key  AUTO_INCREMENT,
+    title varchar(50) not null,
+    content_text text not null,
+    love tinyint DEFAULT '0',
+    created_at DATETIME,
+    created_who bigint,
+    foreign key (created_who)
+    references user(user_id) ON UPDATE CASCADE ON DELETE SET NULL 
+);
+alter table reply_comment change created_at created_at DateTime
+alter table article_comment ADD foreign key (article_id) 
+    references article(article_id) ON UPDATE NO ACTION ON DELETE CASCADE
+    
+alter table article MODIFY column article_id bigint  AUTO_INCREMENT;
+create table user(
+    user_id bigint primary key  AUTO_INCREMENT,
+    user_name varchar(20) not null,
+    user_email varchar(100) not null,
+    user_number varchar(20) not null,
+    user_address varchar(100)
+);
+ALTER TABLE article_comment DROP FOREIGN KEY article_comment_ibfk_3;
+alter table article_comment ADD foreign key (article_id) 
+    references article(article_id) ON UPDATE NO ACTION ON DELETE CASCADE
+select * from information_schema.TABLE_CONSTRAINTS where table_name = 'article_comment';
+alter table article_comment drop foreign key article_comment_ibfk_3
+     
+create table article_comment(
+    article_comment_id bigint primary key  AUTO_INCREMENT,
+    content varchar(255) not null,
+    article_id bigint,
+    love tinyint DEFAULT '0',
+    hate tinyint DEFAULT '0',
+    created_at DATETIME,
+    created_who bigint,
+    foreign key (article_id) 
+    references article(article_id) ON UPDATE NO ACTION ON DELETE CASCADE,
+    foreign key(created_who) 
+    references user(user_id) ON UPDATE CASCADE ON DELETE SET NULL
+);
+alter table reply_comment change create_who created_who bigint
+create table reply_comment(
+    reply_comment_id bigint primary key  AUTO_INCREMENT,
+    content varchar(255) not null,
+    article_comment_id bigint,
+    love tinyint Default '0',
+    hate tinyint default '0',
+    create_who bigint,
+    created_at DATETIME,
+    foreign key (article_comment_id)
+    references article_comment(article_comment_id) ON UPDATE NO ACTION ON DELETE CASCADE
+    foreign key(created_who) 
+    references user(user_id) ON UPDATE CASCADE ON DELETE SET NULL
+)
+alter table reply_comment add foreign key (created_who)
+references user(user_id) ON UPDATE SET NULL ON DELETE CASCADE]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
