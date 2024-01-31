@@ -1,20 +1,21 @@
 package org.Toy.Controller;
 
 import lombok.RequiredArgsConstructor;
-import org.Toy.DTO.Article.ArticleAddRequest;
+import org.Toy.DTO.Article.ArticleListResponse;
 import org.Toy.Domain.Article;
 import org.Toy.Domain.Embedded.CREATE;
 import org.Toy.Domain.USER;
 import org.Toy.Service.ArticleService;
 import org.Toy.Service.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.Scanner;
+import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,24 +24,58 @@ public class ArticleController {
     private final UserService userService;
     private final ArticleService articleService;
     @PostMapping("/saveArticle")
-    public ResponseEntity<Article> saveArticle(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("title : ");
-        String title = scanner.next();
-        System.out.print("content_text : ");
-        String content_text = scanner.next();
-        LocalDateTime time = LocalDateTime.now();
-        System.out.println(time);
-        USER user = userService.findByUser_Id(1L);
-        CREATE create = new CREATE(time,user);
+    public void saveArticle(){
+        for(int i=1;i<500; i++) {
+            String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            int length = 8;
 
-        Article article = new Article(title,content_text,create);
-        articleService.save(article);
-        return ResponseEntity.status(HttpStatus.CREATED).body(article);
+            for (int j = 0; j < length; j++) {
+                int index = random.nextInt(alphabet.length());
+                char randomChar = alphabet.charAt(index);
+                sb.append(randomChar);
+            }
+            String title = sb.toString();
+            int length2 = 100;
+            sb = new StringBuilder();
+            for (int j = 0; j < length2; j++) {
+                int index = random.nextInt(alphabet.length());
+                char randomChar = alphabet.charAt(index);
+                sb.append(randomChar);
+            }
+            String content_text = sb.toString();
+            LocalDateTime time = LocalDateTime.now();
+            System.out.println(time);
+            Long randomNum = random.nextLong(51) + 1;
+            USER user = userService.findByUser_Id(randomNum);
+            CREATE create = new CREATE(time, user);
+
+            Article article = new Article(title, content_text, create);
+            articleService.save(article);
+        }
+        return ;
     }
     @GetMapping("api/test")
-    public String hello(){
+    public String hello() {
         System.out.println("hello");
         return "테스트입니다.";
+    }
+    @GetMapping("/api/ArticleList")
+    public List<ArticleListResponse> getArticleList(){
+        List<ArticleListResponse> articles = articleService.findAll().stream()
+                .map(ArticleListResponse::new)
+                .toList();
+
+        return articles;
+    }
+    @GetMapping("/api/ArticlePage")
+    public List<ArticleListResponse> getArticlePage(){
+        Pageable page = PageRequest.of(0, 10);
+        List<ArticleListResponse> articles = articleService.findAllByPage(page).stream()
+                .map(ArticleListResponse::new)
+                .toList();
+
+        return articles;
     }
 }

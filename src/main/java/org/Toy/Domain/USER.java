@@ -1,6 +1,7 @@
 package org.Toy.Domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Table(name ="user")
 @NoArgsConstructor
+@AllArgsConstructor
 public class USER {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

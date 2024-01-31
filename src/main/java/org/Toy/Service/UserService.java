@@ -16,6 +16,10 @@ public class UserService {
     public USER save(UserAddRequest request){
         return userRepository.save(request.toEntity());
     }
+    @Transactional
+    public USER save(USER user){
+        return userRepository.save(user);
+    }
     public USER findByUser_Id(Long id){
         USER user = userRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("not found : "+ id));

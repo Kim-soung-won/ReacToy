@@ -2,11 +2,13 @@ package org.Toy.Domain;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.Toy.Domain.Embedded.CREATE;
 
 @Entity
 @Table(name = "article")
+@Getter
 @NoArgsConstructor
 public class Article {
     @Id

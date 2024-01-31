@@ -1,21 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
 import React,{useState,useEffect} from "react";
+import ArticleList from "./ArticleList";
 import axios from "axios";
 function App() {
-  const [hello, setHello] = useState('');
-
-  useEffect(() => {
-    axios.get('/api/test')
-        .then((res) => {
-          setHello(res.data);
-        })
-  }, []);
-  return (
-      <div className="App">
-        백엔드 데이터 : {hello}
-      </div>
-  );
+    return (
+        <div className="App">
+            <h1>Article List</h1>
+            <ArticleList />
+        </div>
+    );
 }
 
 export default App;
