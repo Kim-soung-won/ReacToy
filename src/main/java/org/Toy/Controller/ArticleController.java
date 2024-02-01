@@ -10,6 +10,7 @@ import org.Toy.Service.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,21 +62,35 @@ public class ArticleController {
         System.out.println("hello");
         return "테스트입니다.";
     }
-    @GetMapping("/api/ArticleList")
-    public List<ArticleListResponse> getArticleList(){
-        List<ArticleListResponse> articles = articleService.findAll().stream()
+//    @GetMapping("/api/ArticleList")
+//    public List<ArticleListResponse> getArticleList(){
+//        List<ArticleListResponse> articles = articleService.findAll().stream()
+//                .map(ArticleListResponse::new)
+//                .toList();
+//
+//        return articles;
+//    }
+//    @GetMapping("/api/ArticlePage")
+//    public List<ArticleListResponse> getArticlePage(){
+//        Pageable page = PageRequest.of(0, 10);
+//        List<ArticleListResponse> articles = articleService.findAllByPage(page).stream()
+//                .map(ArticleListResponse::new)
+//                .toList();
+//
+//        return articles;
+//    }
+    @GetMapping("/api/ArticlePage/{page}")
+    public List<ArticleListResponse> getArticlePages(@PathVariable int page){
+        System.out.println("PRINT");
+        Pageable pageRange = PageRequest.of(page, 10);
+        List<ArticleListResponse> articles = articleService.findAllByPage(pageRange).stream()
                 .map(ArticleListResponse::new)
                 .toList();
 
         return articles;
     }
-    @GetMapping("/api/ArticlePage")
-    public List<ArticleListResponse> getArticlePage(){
-        Pageable page = PageRequest.of(0, 10);
-        List<ArticleListResponse> articles = articleService.findAllByPage(page).stream()
-                .map(ArticleListResponse::new)
-                .toList();
-
-        return articles;
+    @GetMapping("/api/startPage")
+    public Long getCountArticle(){
+        return articleService.countArticles();
     }
 }

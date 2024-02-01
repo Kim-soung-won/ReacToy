@@ -27,4 +27,7 @@ public class ArticleService {
     public List<Article> findAllByPage(Pageable page){
         return articleRepository.findAllByPage(page).orElseThrow(()->new IllegalArgumentException("해당 페이지에 게시글이 없습니다."));
     }
+    public Long countArticles(){
+        return articleRepository.countArticles().orElseThrow(()->new IllegalArgumentException("개수를 찾지 못했습니다."));
+    }
 }

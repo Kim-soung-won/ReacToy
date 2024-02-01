@@ -12,4 +12,7 @@ public interface ArticleRepository extends JpaRepository<Article,Long> {
 
     @Query(value = "select * from article order by article_id DESC", nativeQuery = true)
     Optional<List<Article>> findAllByPage(Pageable pageable);
+
+    @Query(value = "select count(*) from article", nativeQuery = true)
+    Optional<Long> countArticles();
 }
