@@ -44,13 +44,11 @@ const reducer = (state,action) => {
                 pages : e,
                 len : getLenArray(e,countArticle),
             }
-        case GetArticles :
-            console.log("GetArticles : ",action.articles);
-            console.log("gegege : ",articles);
+        case GetArticles:
             return{
                 ...state,
-                articles : action.articles, 
-            };
+                articles : action.articles
+            }
         case CountList:
             return{
                 ...state,
@@ -90,15 +88,7 @@ const Main = () => {
         
     return (
         <ArticleStates.Provider value={value}>
-        <div>
-            {articles.map((article, index) => (
-                <div>
-                    <div>--------------</div>
-                    <div><span>번호 : </span>{article.id}</div>
-                    <div><span>제목 : </span>{article.title}</div>
-                </div>
-            ))}
-        </div>
+        <ArticleList/>
         <div>Page No. {state.pages}</div>
         <PageButton />
         </ArticleStates.Provider>
