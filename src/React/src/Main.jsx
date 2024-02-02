@@ -4,7 +4,6 @@ import PageButton from "./MainChilds/pageButton";
 import ArticleList from "./MainChilds/ArticleList";
 export const ArticleStates = createContext({
     len : [1,2,3,4,5],
-    articles : [],
     pages : 1,
     dispatch : () =>{},
 })
@@ -35,7 +34,7 @@ export const ClickBtn = 'ClickBtn';
 export const GetArticles = 'GetArticles';
 export const CountList = 'CountList';
 const reducer = (state,action) => {
-    const {countArticle} = state;
+    const {countArticle, articles} = state;
     switch(action.type){ //action의 type: 이 어떤 값인지 확인
         case ClickBtn :
             const e = parseInt(action.btnVal,10);
@@ -46,6 +45,8 @@ const reducer = (state,action) => {
                 len : getLenArray(e,countArticle),
             }
         case GetArticles :
+            console.log("GetArticles : ",action.articles);
+            console.log("gegege : ",articles);
             return{
                 ...state,
                 articles : action.articles, 
@@ -77,11 +78,27 @@ const Main = () => {
                 console.error('Count error',error);
             });
     },[]);
-
-    
+    useEffect(() =>{
+        axios.get('/api/ArticlePage/' +String(pages-1)) 
+                .then(response => { 
+                    dispatch({type : GetArticles, articles : response.data});
+                }) 
+                .catch(error => { 
+                    console.error('Page Load error!', error); 
+            });
+    } ,[pages]);
+        
     return (
         <ArticleStates.Provider value={value}>
-        <ArticleList />
+        <div>
+            {articles.map((article, index) => (
+                <div>
+                    <div>--------------</div>
+                    <div><span>번호 : </span>{article.id}</div>
+                    <div><span>제목 : </span>{article.title}</div>
+                </div>
+            ))}
+        </div>
         <div>Page No. {state.pages}</div>
         <PageButton />
         </ArticleStates.Provider>
